@@ -5,12 +5,12 @@ function add(a, b) {
 
 function subtract(a, b) {
     let total = a - b;
-    return total.toPrecision(6);
+    return total.toPrecision(5);
 }
 
 function multiply(a, b) {
     let product = a * b;
-    return product.toPrecision(6);
+    return product.toPrecision(5);
 }
 
 function divide(a, b) {
@@ -18,7 +18,7 @@ function divide(a, b) {
         return "LMAO";
     }
     let quotient = a / b;
-    return quotient.toPrecision(6);
+    return quotient.toPrecision(5);
 }
 
 function operate(operator, a, b) {
@@ -65,6 +65,7 @@ function getAction(cb) {
         if(operator_entered) {
             number2 = getNumber(cb, number2);
             val = number2;
+            number1 = operate(operator, number1, number2);
         }
         else {
             number1 = getNumber(cb, number1);
@@ -87,9 +88,7 @@ function getAction(cb) {
         else {
             number1 *= -1;
             val = number1;
-        }
-        console.log(number1);
-        console.log(number2);           
+        }     
     }
     else if(cb === ".") {
         if(operator_entered) {
@@ -103,22 +102,14 @@ function getAction(cb) {
     }
     else if(cb === "="){
         operator_entered = false;
-        number1 = operate(operator, number1, number2);
-        console.log(operator);
-        console.log(number1);
-        console.log(number2);
-        number2 = 0;
         val = number1;
-        operator = " ";
+        number2 = 0;
     } else { //when an operator is entered, number1 becomes
         //our total prior and number 2 is what is entered after
-        if(operator !== " ") {
-            number1 = operate(operator, number1, number2);
-        }
-        operator_entered = true
         operator = cb;
-        number2 = 0;
-        val = "";
+        operator_entered = true;
+        val = number1;
+        numDigits = 0;
     }
 
     return val;
@@ -126,7 +117,8 @@ function getAction(cb) {
 
 function getNumber(cb, number) {
     if(numDigits > 9) {
-        alert("Please enter numbers with 8 digits or less!")
+        alert("Please enter up to 8 digits");
+        numDigits = 0;
         return;
     }
     number *= 10;
