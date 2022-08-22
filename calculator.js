@@ -49,8 +49,6 @@ let number2 = 0;
 let operator = " ";
 let operator_entered = false;
 let numDigits = 0;
-let decimal_pressed = false;
-let numDeci = 0;
 
 buttons.forEach(button => { 
     button.addEventListener('click', () => {
@@ -81,8 +79,6 @@ function getAction(cb) {
         operator = " ";
         val = "";
         numDigits = 0;
-        decimal_pressed = false;
-        numDeci = 0;
     }
     else if(cb === "-/+") {
         if(operator_entered) {
@@ -92,20 +88,10 @@ function getAction(cb) {
         else {
             number1 *= -1;
             val = number1;
-        }
-        console.log(number1);
-        console.log(number2);           
-    }
-    else if (cb == ".") {
-        decimal_pressed = true;
-        numDeci = 0;
+        }     
     }
     else if(cb === "="){
         operator_entered = false;
-        decimal_pressed = false;
-        console.log(operator);
-        console.log(number1);
-        console.log(number2);
         val = number1;
         number2 = 0;
     } else { //when an operator is entered, number1 becomes
@@ -114,28 +100,19 @@ function getAction(cb) {
         operator_entered = true;
         val = number1;
         numDigits = 0;
-        numDeci = 0;
     }
 
     return val;
 }
 
 function getNumber(cb, number) {
-    if(numDigits + numDeci > 9) {
+    if(numDigits > 9) {
         alert("Please enter up to 8 digits");
         numDigits = 0;
-        numDeci = 0;
         return;
     }
-
-    if(decimal_pressed) {
-        number += +cb / (Math.pow(10, numDeci));
-        numDeci++;
-    }
-    else {
-        number *= 10;
-        number += +cb;
-        numDigits++;
-    }
+    number *= 10;
+    number += +cb;
+    numDigits++;
     return number;
 }
