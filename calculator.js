@@ -91,6 +91,16 @@ function getAction(cb) {
         console.log(number1);
         console.log(number2);           
     }
+    else if(cb === ".") {
+        if(operator_entered) {
+            number2 = getNumber(cb, number2);
+            val = number2;
+        }
+        else {
+            number1 = getNumber(cb, number1);
+            val = number1;
+        }
+    }
     else if(cb === "="){
         operator_entered = false;
         number1 = operate(operator, number1, number2);
@@ -99,6 +109,7 @@ function getAction(cb) {
         console.log(number2);
         number2 = 0;
         val = number1;
+        operator = " ";
     } else { //when an operator is entered, number1 becomes
         //our total prior and number 2 is what is entered after
         if(operator !== " ") {
@@ -114,6 +125,10 @@ function getAction(cb) {
 }
 
 function getNumber(cb, number) {
+    if(numDigits > 9) {
+        alert("Please enter numbers with 8 digits or less!")
+        return;
+    }
     number *= 10;
     number += +cb;
     numDigits++;
