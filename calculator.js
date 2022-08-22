@@ -5,12 +5,12 @@ function add(a, b) {
 
 function subtract(a, b) {
     let total = a - b;
-    return total.toPrecision(6);
+    return total.toPrecision(5);
 }
 
 function multiply(a, b) {
     let product = a * b;
-    return product.toPrecision(6);
+    return product.toPrecision(5);
 }
 
 function divide(a, b) {
@@ -18,7 +18,7 @@ function divide(a, b) {
         return "LMAO";
     }
     let quotient = a / b;
-    return quotient.toPrecision(6);
+    return quotient.toPrecision(5);
 }
 
 function operate(operator, a, b) {
@@ -49,6 +49,8 @@ let number2 = 0;
 let operator = " ";
 let operator_entered = false;
 let numDigits = 0;
+let decimal_pressed = false;
+let numDeci = 0;
 
 buttons.forEach(button => { 
     button.addEventListener('click', () => {
@@ -65,6 +67,7 @@ function getAction(cb) {
         if(operator_entered) {
             number2 = getNumber(cb, number2);
             val = number2;
+            number1 = operate(operator, number1, number2);
         }
         else {
             number1 = getNumber(cb, number1);
@@ -78,6 +81,8 @@ function getAction(cb) {
         operator = " ";
         val = "";
         numDigits = 0;
+        decimal_pressed = false;
+        numDeci = 0;
     }
     else if(cb === "-/+") {
         if(operator_entered) {
@@ -91,31 +96,46 @@ function getAction(cb) {
         console.log(number1);
         console.log(number2);           
     }
+    else if (cb == ".") {
+        decimal_pressed = true;
+        numDeci = 0;
+    }
     else if(cb === "="){
         operator_entered = false;
-        number1 = operate(operator, number1, number2);
+        decimal_pressed = false;
         console.log(operator);
         console.log(number1);
         console.log(number2);
-        number2 = 0;
         val = number1;
+        number2 = 0;
     } else { //when an operator is entered, number1 becomes
         //our total prior and number 2 is what is entered after
-        if(operator !== " ") {
-            number1 = operate(operator, number1, number2);
-        }
-        operator_entered = true
         operator = cb;
-        number2 = 0;
-        val = "";
+        operator_entered = true;
+        val = number1;
+        numDigits = 0;
+        numDeci = 0;
     }
 
     return val;
 }
 
 function getNumber(cb, number) {
-    number *= 10;
-    number += +cb;
-    numDigits++;
+    if(numDigits + numDeci > 9) {
+        alert("Please enter up to 8 digits");
+        numDigits = 0;
+        numDeci = 0;
+        return;
+    }
+
+    if(decimal_pressed) {
+        number += +cb / (Math.pow(10, numDeci));
+        numDeci++;
+    }
+    else {
+        number *= 10;
+        number += +cb;
+        numDigits++;
+    }
     return number;
 }
