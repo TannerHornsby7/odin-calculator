@@ -79,12 +79,20 @@ function getAction(cb) {
         val = "";
         numDigits = 0;
     }
-    else if(cb === "+/-") {
-        number *= -1;
-        val = number;            
+    else if(cb === "-/+") {
+        if(operator_entered) {
+            number2 *= -1;
+            val = number2;
+        }
+        else {
+            number1 *= -1;
+            val = number1;
+        }
+        console.log(number1);
+        console.log(number2);           
     }
     else if(cb === "="){
-        operator_entered = true;
+        operator_entered = false;
         number1 = operate(operator, number1, number2);
         console.log(operator);
         console.log(number1);
@@ -93,6 +101,9 @@ function getAction(cb) {
         val = number1;
     } else { //when an operator is entered, number1 becomes
         //our total prior and number 2 is what is entered after
+        if(operator !== " ") {
+            number1 = operate(operator, number1, number2);
+        }
         operator_entered = true
         operator = cb;
         number2 = 0;
