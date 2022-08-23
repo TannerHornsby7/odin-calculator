@@ -5,12 +5,12 @@ function add(a, b) {
 
 function subtract(a, b) {
     let total = a - b;
-    return total.toPrecision(5);
+    return total;
 }
 
 function multiply(a, b) {
     let product = a * b;
-    return product.toPrecision(5);
+    return product;
 }
 
 function divide(a, b) {
@@ -18,7 +18,7 @@ function divide(a, b) {
         return "LMAO";
     }
     let quotient = a / b;
-    return quotient.toPrecision(5);
+    return quotient;
 }
 
 function operate(operator, a, b) {
@@ -65,7 +65,8 @@ function getAction(cb) {
         if(operator_entered) {
             number2 = getNumber(cb, number2);
             val = number2;
-            number1 = operate(operator, number1, number2);
+            console.log(number1);
+            // console.log(number1);
         }
         else {
             number1 = getNumber(cb, number1);
@@ -101,14 +102,17 @@ function getAction(cb) {
         }
     }
     else if(cb === "="){
+        number1 = operate(operator, number1, number2);
+        console.log(number1);
         operator_entered = false;
-        val = number1;
+        val = number1.toPrecision(4);
         number2 = 0;
     } else { //when an operator is entered, number1 becomes
         //our total prior and number 2 is what is entered after
+        if(Number.isNaN(number1)) return;
         operator = cb;
         operator_entered = true;
-        val = number1;
+        val = number1.toPrecision(4);
         numDigits = 0;
     }
 
@@ -122,6 +126,8 @@ function getNumber(cb, number) {
         return;
     }
     number *= 10;
+    // console.log(cb);
+    // console.log(number);
     number += +cb;
     numDigits++;
     return number;
